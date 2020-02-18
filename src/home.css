@@ -53,3 +53,30 @@ div.instructions ul {
     /* To remove bullet points */
     list-style-type: none;
 }
+
+.game-wrapper {
+    padding: 30px;
+    display: grid;
+    /* 1 columns, fills all space given */
+    grid-template-columns: 1fr;
+}
+
+.conveyor-row {
+    grid-row: 1;
+}
+
+.grill-row {
+    grid-row: 2;
+}
+
+.cheese-row {
+    grid-row: 3;
+}
+
+.staging-row {
+    grid-row: 4;
+}
+
+.orders-row {
+    grid-row: 5;
+}
