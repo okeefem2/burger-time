@@ -67,72 +67,33 @@ div.instructions ul {
 
 .grill-row {
     grid-row: 2;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.grill-row :nth-child(1) {
-    grid-column: 1 / 2;
-}
-
-.grill-row :nth-child(2) {
-    grid-column: 2 / 3;
-}
-
-.grill-row :nth-child(3) {
-    grid-column: 3 / 4;
 }
 
 .cheese-row {
     grid-row: 3;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.cheese-row :nth-child(1) {
-    grid-column: 1 / 2;
-}
-
-.cheese-row :nth-child(2) {
-    grid-column: 2 / 3;
-}
-
-.cheese-row :nth-child(3) {
-    grid-column: 3 / 4;
 }
 
 .staging-row {
     grid-row: 4;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-}
-
-.staging-row :nth-child(1) {
-    grid-column: 1 / 2;
-}
-
-.staging-row :nth-child(2) {
-    grid-column: 2 / 3;
-}
-
-.staging-row :nth-child(3) {
-    grid-column: 3 / 4;
 }
 
 .orders-row {
     grid-row: 5;
+}
+
+.grid-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
 
-.orders-row :nth-child(1) {
+.grid-row :nth-child(1) {
     grid-column: 1 / 2;
 }
 
-.orders-row :nth-child(2) {
+.grid-row :nth-child(2) {
     grid-column: 2 / 3;
 }
 
-.orders-row :nth-child(3) {
+.grid-row :nth-child(3) {
     grid-column: 3 / 4;
 }
