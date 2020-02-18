@@ -1,0 +1,22 @@
+/* In the root psuedo element, we can define custom css properties to improve readability ease of maintenance */
+:root {
+    --primary-color: #FF8566;
+    --primary-color-light: #FF9980
+    --primary-color-dark: #B34F36;
+    --secondary-color: #24B384;
+    --secondary-color-light: #66FFCD;
+    --secondary-color-dark: #58B093;
+}
+
+/* We use these styles to remove default whitespace around a web page */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+body {
+    background-color: var(--primary-color-light);
+}
