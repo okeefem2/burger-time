@@ -19,4 +19,15 @@
 
 body {
     background-color: var(--primary-color-light);
+    /* https://fonts.google.com/specimen/Lacquer?selection.family=Lacquer */
+    font-family: 'Lacquer', sans-serif;
+    color: var(--primary-color);
+    font-size: 14px;
+}
+
+a {
+    color: var(--secondary-color);
+    /* To remove underline */
+    text-decoration: none;
+    font-size: 18px;
 }
