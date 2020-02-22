@@ -1,7 +1,5 @@
 console.log('Hello world!');
 
-// alert('Welcome to Burger Time!');
-
 // A map of all the possible ingredients a burger can have
 // Numbers correspond to the stage number they are added at
 const ingredients = {
@@ -99,25 +97,14 @@ let actions = [
     turnOptions.Next,
 ]; // Current set of user actions
 let activeOrders = [
-    {
-        ...generateOrder(),
-        burger: generateBurger()
-    },
-    {
-        ...generateOrder(),
-        burger: generateBurger()
-    },
-    {
-        ...generateOrder(),
-        burger: generateBurger()
-    },
+    generateOrder(),
+    generateOrder(),
+    generateOrder(),
 ]; // Current set of orders being fulfilled
 let orderHistory = []; // Set of completed/failed orders
-let turnCounter = 0; // Total number of turns
 
 function startTurn() {
     readActions();
-    turnCounter++;
     // First check if any new orders should be started
     for (let i = 0; i < 3; i++) {
         let order = activeOrders[i];
@@ -126,8 +113,6 @@ function startTurn() {
         if (!order) {
             // Generate a new order
             order = generateOrder();
-            const burger = generateBurger();
-            order.burger = burger;
             activeOrders[i] = order;
             // And set the action to next so it the burger
             // moves from conveyor to the grill
@@ -192,6 +177,7 @@ function generateOrder() {
         cookLevel,
         turnsToComplete: baseTurns + cookLevel,
         status: orderStatuses.InProgress,
+        burger: generateBurger(),
     };
 }
 
