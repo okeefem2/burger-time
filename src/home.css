@@ -175,6 +175,13 @@ button {
     margin-left: 30px;
 }
 
+.counts {
+    color: #272727;
+    margin-left: 30px;
+    position: fixed;
+    margin-top: 50px;
+}
+
 button:hover {
     transform: translateY(-0.3rem);
     /* offset x offset y blur and color, higher blur makes it look higher off the page */

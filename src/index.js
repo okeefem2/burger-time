@@ -5,7 +5,7 @@ console.log('Hello world!');
 const ingredients = {
     Patty: 1,
     Cheese: 3,
-    Bun: 4,
+    Bun: 4, // Currently this is an implicit argument
 };
 
 // A map of all the possible cook levels a burger can have
@@ -36,8 +36,7 @@ const stages = {
     Grill: 2,
     Cheese: 3,
     Staging: 4,
-    Delivered: 5,
-    Completed: 6,
+    Completed: 5,
 }
 
 // A map of each state along with the allowed transition states from that stage
@@ -80,6 +79,7 @@ const exampleBurger = {
 };
 
 const exampleOrder = {
+    name: 'Michael',
     ingredients: [
         ingredients.Patty,
         ingredients.Bun,
@@ -103,10 +103,16 @@ let activeOrders = [
 ]; // Current set of orders being fulfilled
 let orderHistory = []; // Set of completed/failed orders
 
+let successCount = 0;
+let failCount = 0;
+
 function startTurn() {
     readActions();
+    console.log(activeOrders);
+    console.log(actions);
     // First check if any new orders should be started
     for (let i = 0; i < 3; i++) {
+        debugger;
         let order = activeOrders[i];
         let action = actions[i];
         // If there is not an active order in any positon
@@ -124,15 +130,26 @@ function startTurn() {
         // Handle completed order
         if (order.burger.stage === stages.Completed) {
             orderHistory.push(order);
-            activeOrders[i] = undefined;
+            const match = ingredientsMatch(order.ingredients, order.burger.ingredients);
+            if (match && order.cookLevel === order.burger.cookLevel && order.turnsToComplete >= order.burger.turnCounter) {
+                successCount++;
+                document.getElementById('successCount').innerText = successCount;
+            } else {
+                failCount++;
+                document.getElementById('failCount').innerText = failCount;
+            }
+            order = generateOrder();
+            order.burger.stage = stages.Grill;
+            activeOrders[i] = order;
         } else {
             activeOrders[i] = order
         }
+        drawSelect(i, order);
         // Reset action
         actions[i] = undefined;
-        drawSelect(i, order);
     }
     // Turn is complete!
+    drawStages();
 }
 
 function handleAction(burger, action) {
@@ -151,6 +168,9 @@ function handleAction(burger, action) {
         case turnOptions.Toss:
             return generateBurger();
         case turnOptions.Hold:
+            if (burger.stage === stages.Grill) {
+                return { ...burger, cookLevel: burger.cookLevel + 1 };
+            }
         default:
             return burger;
     }
@@ -163,7 +183,8 @@ function generateOrder() {
         ingredients.Patty,
     ];
     const shouldHaveCheese = !!getRandomIntInclusive(0, 1);
-    const shouldHaveBun = !!getRandomIntInclusive(0, 1);
+    // const shouldHaveBun = !!getRandomIntInclusive(0, 1);
+    const shouldHaveBun = false;
 
     if (shouldHaveCheese) {
         baseIngredients.push(ingredients.Cheese);
@@ -173,9 +194,10 @@ function generateOrder() {
         baseIngredients.push(ingredients.Bun);
     }
     return {
+        name: 'Michael', // TODO use an api
         ingredients: baseIngredients,
         cookLevel,
-        turnsToComplete: baseTurns + cookLevel,
+        turnsToComplete: baseTurns + cookLevel + (shouldHaveCheese ? 1 : 0),
         status: orderStatuses.InProgress,
         burger: generateBurger(),
     };
@@ -183,7 +205,9 @@ function generateOrder() {
 
 function generateBurger() {
     return {
-        ingredients: [],
+        ingredients: [
+            ingredients.Patty,
+        ],
         cookLevel: cookLevels.Raw,
         turnCounter: 0,
         stage: stages.Conveyor,
@@ -201,6 +225,7 @@ function drawSelect(index, order) {
     const stage = document.querySelector(`.grid-row[data-stage="${order.burger.stage}"]`);
     const column = stage.getElementsByClassName('column')[index];
     const select = document.createElement('select');
+    select.dataset.column = index;
     const actionsAvailable = stageTransitions[order.burger.stage];
     const defaultOption = document.createElement('option');
     defaultOption.innerText = 'Select an Action';
@@ -220,7 +245,84 @@ function readActions() {
     for (let i = selects.length - 1; i >= 0; i--) {
         let select = selects[i];
         console.log(select.value);
-        actions[i] = select.value;
+        actions[+select.dataset.column] = select.value;
         select.remove();
     }
+}
+
+function drawStages() {
+    const stages = document.getElementsByClassName('grid-row');
+    for (let stage of stages) {
+        const stageValue = stage.dataset.stage;
+        const columns = stage.getElementsByClassName('column');
+        for (let i = 0; i < columns.length; i++) {
+            const column = columns[i];
+            buildStage(+stageValue, column, activeOrders[i]);
+        }
+    }
+}
+
+function buildStage(stage, column, order) {
+    const image = column.getElementsByTagName('img')[0];
+    const baseSrc = '../assets/png/';
+    // TODO make this more dynamic
+    let burger;
+    if (order && order.burger && order.burger.stage === stage) {
+        burger = order.burger;
+    }
+    switch (stage) {
+        case stages.Grill:
+            if (!!burger) {
+                const cookLevel = column.getElementsByClassName('cook-level')[0];
+                cookLevel.innerText = burger.cookLevel;
+                image.src = `${baseSrc}Grill-Burger.png`
+                break;
+            }
+            image.src = `${baseSrc}Grill.png`;
+            break;
+        case stages.Cheese:
+            if (!burger) {
+                image.src = `${baseSrc}Cheese.png`
+                break;
+            }
+            if (burger.ingredients.some(i => i === ingredients.Cheese)) {
+                image.src = `${baseSrc}Burger-Cheese.png`
+                break;
+            }
+            image.src = `${baseSrc}Burger.png`;
+            break;
+        case stages.Staging:
+            if (!burger) {
+                image.src = `${baseSrc}Plate-Bun.png`
+                break;
+            }
+            if (burger.ingredients.some(i => i === ingredients.Cheese)) {
+                image.src = `${baseSrc}Plate-Burger-Cheese-Bun.png`
+                break;
+            }
+            image.src = `${baseSrc}Plate-Burger-Bun.png`;
+            break;
+        case stages.Completed:
+            const turnsRemaining = column.getElementsByClassName('time-remaining')[0];
+            turnsRemaining.innerText = Math.max(order.turnsToComplete - order.burger.turnCounter, 0);
+            const cookLevel = column.getElementsByClassName('cook-level')[0];
+            cookLevel.innerText = order.cookLevel;
+            if (order.ingredients.some(i => i === ingredients.Cheese)) {
+                image.src = `${baseSrc}Plate-Burger-Cheese-Bun.png`
+                break;
+            }
+            image.src = `${baseSrc}Plate-Burger-Bun.png`;
+            break;
+        default:
+            break;
+    }
+}
+
+function ingredientsMatch(ing1, ing2) {
+    if (ing1.length !== ing2.length) return false;
+
+    for (let i = 0; i < ing1.length; i++) {
+        if (ing1[i] !== ing2[i]) return false;
+    }
+    return true;
 }

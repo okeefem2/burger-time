@@ -19,27 +19,38 @@
 <body>
     <h1>Burger Time</h1>
     <button type="button" onclick="startTurn()">Start Turn</button>
+    <div class="counts">
+        <div>
+            Successful Orders: <span id="successCount">0</span>
+        </div>
+        <div>
+            Failed Orders: <span id="failCount">0</span>
+        </div>
+    </div>
     <!-- When building a grid, you want a top level wrapper -->
     <div class="game-wrapper">
         <div class="conveyor-row" data-stage="1">
-            <img src="../assets/png/Belt-3-Burgers.png" alt="Conveyor Belt Plus 3 Burgers" height="300px">
+            <img src="../assets/png/Belt-3-Burgers.png" alt="Conveyor Belt Plus 3 Burgers" height="200px">
             <!-- <img src="../assets/png/Belt-2-Burgers.png" alt="Conveyor Belt Plus 2 Burgers" height="300px"> -->
         </div>
         <div class="grill-row grid-row" data-stage="2">
             <div class="column">
-                <img src="../assets/png/Grill.png" alt="Empty Grill" height="250px">
-                <!-- <select>
-                    <option>Select An Action</option>
-                    <option>Hold</option>
-                    <option>Next</option>
-                    <option>Toss</option>
-                </select> -->
+                <img src="../assets/png/Grill.png" alt="Empty Grill" height="200px">
+                <div>
+                    Cook Level: <span class="cook-level"></span>
+                </div>
             </div>
             <div class="column">
-                <img src="../assets/png/Grill.png" alt="Empty Grill" height="250px">
+                <img src="../assets/png/Grill.png" alt="Empty Grill" height="200px">
+                <div>
+                    Cook Level: <span class="cook-level"></span>
+                </div>
             </div>
             <div class="column">
-                <img src="../assets/png/Grill.png" alt="Empty Grill" height="250px">
+                <img src="../assets/png/Grill.png" alt="Empty Grill" height="200px">
+                <div>
+                    Cook Level: <span class="cook-level"></span>
+                </div>
             </div>
             <!-- <img src="../assets/png/Grill-Burger.png" alt="Grill With Burger" height="250px"> -->
         </div>
@@ -68,12 +79,30 @@
         <div class="orders-row grid-row" data-stage="5">
             <div class="column">
                 <img src="../assets/png/Plate-Burger-Bun.png" alt="Plate with Bun and Burger" height="150px">
+                <div>
+                    Turns Remaining: <span class="time-remaining">0</span>
+                </div>
+                <div>
+                    Cook Level Desired: <span class="cook-level">0</span>
+                </div>
             </div>
             <div class="column">
                 <img src="../assets/png/Plate-Burger-Bun.png" alt="Plate with Bun and Burger" height="150px">
+                <div>
+                    Turns Remaining: <span class="time-remaining">0</span>
+                </div>
+                <div>
+                    Cook Level Desired: <span class="cook-level">0</span>
+                </div>
             </div>
             <div class="column">
                 <img src="../assets/png/Plate-Burger-Bun.png" alt="Plate with Bun and Burger" height="150px">
+                <div>
+                    Turns Remaining: <span class="time-remaining">0</span>
+                </div>
+                <div>
+                    Cook Level Desired: <span class="cook-level">0</span>
+                </div>
             </div>
         </div>
     </div>
